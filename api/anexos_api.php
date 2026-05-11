@@ -23,7 +23,7 @@ define('ANEXOS_QUALITY',  80);               // JPEG quality após compressão
 const ANEXOS_MIMES_IMG = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 const ANEXOS_MIMES_VID = ['video/mp4', 'video/quicktime', 'video/webm'];
 const ANEXOS_MIMES_OK  = [...ANEXOS_MIMES_IMG, ...ANEXOS_MIMES_VID];
-const ANEXOS_CATS      = ['pagamento', 'antes', 'depois', 'obra', 'outro'];
+const ANEXOS_CATS      = ['entrada', 'processo', 'entrega', 'motor', 'interior', 'detalhe', 'outro'];
 
 // ── Cria tabela e pasta ─────────────────────────────────────────
 function anexos_setup(): void {

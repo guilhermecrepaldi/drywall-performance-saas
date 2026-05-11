@@ -158,11 +158,21 @@ function gerar_codigo_os(int $cliente_id, string $segmento, int $ano): string {
 // ── Segmentos disponíveis ────────────────────────────────────
 function segmentos(): array {
     return [
-        'R' => 'Residencial',
-        'C' => 'Comercial',
-        'K' => 'Condomínio',
-        'I' => 'Industrial',
-        'O' => 'Outro',
+        'H' => 'Hatch / Compacto (P)',
+        'S' => 'Sedan / Médio (M)',
+        'V' => 'SUV / Crossover (G)',
+        'P' => 'Pick-up / Caminhonete (GG)',
+        'O' => 'Outros / Especial',
+    ];
+}
+
+function multiplicadores_tamanho(): array {
+    return [
+        'H' => 1.0,
+        'S' => 1.2,
+        'V' => 1.5,
+        'P' => 1.8,
+        'O' => 1.0,
     ];
 }
 
@@ -242,48 +252,37 @@ function desenvolvimento_status(): array {
 
 function tabela_servicos_cnae(): array {
     return [
-        'Drywall / Forro' => [
-            'Forro de drywall liso' => ['4330-4/02', '4330-4/03'],
-            'Forro tabicado' => ['4330-4/02'],
-            'Sanca de drywall' => ['4330-4/03'],
-            'Cortineiro de drywall' => ['4330-4/03'],
-            'Fechamento de viga / tubulação' => ['4330-4/02'],
-            'Rebaixo de teto' => ['4330-4/02'],
+        'Estética Externa' => [
+            'Polimento Comercial' => ['4520-0/05'],
+            'Polimento Técnico (Correção)' => ['4520-0/05'],
+            'Vitrificação de Pintura (Ceramic)' => ['4520-0/05'],
+            'Lavagem Detalhada Premium' => ['4520-0/05'],
+            'Descontaminação de Pintura' => ['4520-0/05'],
+            'Lavagem Técnica de Motor' => ['4520-0/05'],
         ],
-        'Divisórias / Paredes' => [
-            'Parede de drywall simples' => ['4330-4/02'],
-            'Divisória de drywall' => ['4330-4/02'],
-            'Parede com lã acústica' => ['4330-4/02'],
-            'Shaft / fechamento técnico' => ['4330-4/02'],
-            'Reparo em parede de drywall' => ['4330-4/99'],
+        'Estética Interna' => [
+            'Higienização Interna Completa' => ['4520-0/05'],
+            'Limpeza e Hidratação de Couro' => ['4520-0/05'],
+            'Impermeabilização de Tecidos' => ['4520-0/05'],
+            'Oxi-sanitização (Ozônio)' => ['4520-0/05'],
+            'Limpeza Detalhada de Painel/Plásticos' => ['4520-0/05'],
         ],
-        'Gesso / Acabamento' => [
-            'Acabamento em gesso' => ['4330-4/03'],
-            'Moldura / rodateto de gesso' => ['4330-4/03'],
-            'Elementos decorativos em gesso' => ['4330-4/03'],
-            'Tratamento de juntas' => ['4330-4/03'],
-            'Massa drywall / acabamento fino' => ['4330-4/03'],
+        'Proteção & Estilo' => [
+            'Aplicação de PPF (Full)' => ['4520-0/05'],
+            'Aplicação de Película Solar (Insulfilm)' => ['4520-0/05'],
+            'Envelopamento de Retrovisores/Teto' => ['4520-0/05'],
+            'Pintura de Pinças de Freio' => ['4520-0/01'],
         ],
-        'Portas / Esquadrias' => [
-            'Instalação de porta' => ['4330-4/02'],
-            'Instalação de janela' => ['4330-4/02'],
-            'Instalação de batente / guarnição / alisar' => ['4330-4/02'],
-            'Instalação de armário embutido' => ['4330-4/02'],
+        'Reparos Rápidos' => [
+            'Martelinho de Ouro (Reparo)' => ['4520-0/01'],
+            'Revitalização de Faróis' => ['4520-0/05'],
+            'Pintura de Rodas' => ['4520-0/01'],
+            'Retoque de Pintura (Spot Repair)' => ['4520-0/01'],
         ],
-        'Outros acabamentos' => [
-            'Chapisco' => ['4330-4/99'],
-            'Emboço' => ['4330-4/99'],
-            'Reboco' => ['4330-4/99'],
-            'Instalação de persiana' => ['4330-4/99'],
-            'Instalação de toldo' => ['4330-4/99'],
-            'Colocação de espelho / vidro' => ['4330-4/99'],
-        ],
-        'Materiais / Revenda' => [
-            'Venda de chapa drywall' => ['4744-0/05', '4744-0/99'],
-            'Venda de perfil metálico' => ['4744-0/05'],
-            'Venda de parafusos / buchas / fitas' => ['4744-0/05'],
-            'Venda de massa drywall / gesso' => ['4744-0/05'],
-            'Venda geral de material de construção' => ['4744-0/99'],
+        'Produtos / Revenda' => [
+            'Cera Sintética Profissional' => ['4744-0/99'],
+            'Kit de Manutenção Home Care' => ['4744-0/99'],
+            'Aromatizante Premium' => ['4744-0/99'],
         ],
     ];
 }
@@ -315,12 +314,9 @@ function cnae_por_servico(string $servico): string {
 
 function cnae_descricoes(): array {
     return [
-        '4330-4/02' => 'Instalação de portas, janelas, tetos, divisórias e armários embutidos de qualquer material.',
-        '4330-4/03' => 'Obras de acabamento em gesso e estuque; usado para gesso, drywall, sancas, forros e rebaixamentos.',
-        '4330-4/04' => 'Serviços de pintura de edifícios em geral.',
-        '4330-4/99' => 'Outras obras de acabamento da construção não especificadas em subclasses mais específicas.',
-        '4744-0/05' => 'Comércio varejista de materiais de construção, quando a OS envolver revenda de materiais.',
-        '4744-0/99' => 'Comércio varejista de materiais de construção em geral, conforme enquadramento comercial.',
+        '4520-0/05' => 'Serviços de lavagem, polimento e estética automotiva.',
+        '4520-0/01' => 'Serviços de lanternagem, funilaria e pintura de veículos.',
+        '4744-0/99' => 'Comércio varejista de produtos automotivos e conservação.',
     ];
 }
 

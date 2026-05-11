@@ -165,7 +165,7 @@ include 'includes/head.php';
             <div class="form-grid cols-4">
               <div class="form-field">
                 <label>Categoria</label>
-                <input type="text" name="categoria" placeholder="Ex: Chapas">
+                <input type="text" name="categoria" placeholder="Ex: Polimento / Proteção">
               </div>
               <div class="form-field span-2">
                 <label>Produto *</label>
@@ -173,7 +173,7 @@ include 'includes/head.php';
               </div>
               <div class="form-field">
                 <label>Unidade</label>
-                <input type="text" name="unidade" placeholder="un, m, kg">
+                <input type="text" name="unidade" placeholder="un, L, kit">
               </div>
               <div class="form-field span-4">
                 <label>Descrição</label>
@@ -197,7 +197,7 @@ include 'includes/head.php';
             <div class="form-grid cols-3">
               <div class="form-field">
                 <label>Unidade de serviço</label>
-                <input type="text" name="unidade_servico" placeholder="ex: m²">
+                <input type="text" name="unidade_servico" placeholder="ex: veículo">
               </div>
               <div class="form-field">
                 <label>Consumo/unid.</label>

@@ -110,6 +110,20 @@ h1, h2, h3 { color: var(--text-main); font-weight: 600; letter-spacing: -0.02em;
   margin: 0 auto;
 }
 
+/* ── RESPONSIVE OVERRIDES ─────────────────────────── */
+
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* Oculta sidebar no mobile */
+  }
+  .main {
+    padding: 16px;
+  }
+  .topbar {
+    padding: 0 16px;
+  }
+}
+
 /* ── SIDEBAR NAVIGATION ─────────────────────────── */
 
 .sidebar-logo {

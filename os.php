@@ -82,13 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_os'])) {
         'cliente_end'    => trim($_POST['cliente_end']   ?? ''),
         'cliente_bairro' => trim($_POST['cliente_bairro']?? ''),
         'cliente_cidade' => trim($_POST['cliente_cidade']?? ''),
-        'obra_tipo'      => trim($_POST['obra_tipo']     ?? ''),
-        'obra_segmento'  => trim($_POST['obra_segmento'] ?? ''),
-        'segmento_cod'   => $segmento_cod,
-        'obra_prazo'     => trim($_POST['obra_prazo']    ?? ''),
-        'obra_inicio'    => trim($_POST['obra_inicio']   ?? ''),
-        'obra_pe_dir'    => trim($_POST['obra_pe_dir']   ?? ''),
-        'obra_acesso'    => trim($_POST['obra_acesso']   ?? ''),
+        'veiculo_placa'  => trim($_POST['veiculo_placa']  ?? ''),
+        'veiculo_modelo' => trim($_POST['veiculo_modelo'] ?? ''),
+        'veiculo_cor'    => trim($_POST['veiculo_cor']    ?? ''),
+        'veiculo_km'     => trim($_POST['veiculo_km']     ?? ''),
+        'checklist'      => $_POST['checklist_item']      ?? [],
         'itens'          => $itens,
         'subtotal'       => $subtotal,
         'desconto'       => $desconto,
@@ -124,6 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_os'])) {
         $to_save['itens'] = json_encode($os['itens'], JSON_UNESCAPED_UNICODE);
         $to_save['incluso'] = json_encode($os['incluso'], JSON_UNESCAPED_UNICODE);
         $to_save['nao_incluso'] = json_encode($os['nao_incluso'], JSON_UNESCAPED_UNICODE);
+        $to_save['checklist'] = json_encode($os['checklist'], JSON_UNESCAPED_UNICODE);
 
         if (!salvar_db('os', $to_save, 'id')) {
             $msg_err = 'Erro ao salvar OS.';
@@ -205,7 +204,7 @@ if ($acao === 'edit' && isset($_GET['id'])) {
         if (isset($editando['itens']) && is_string($editando['itens'])) {
             $editando['itens'] = json_decode($editando['itens'], true);
         }
-        foreach (['incluso', 'nao_incluso'] as $jsonField) {
+        foreach (['incluso', 'nao_incluso', 'checklist'] as $jsonField) {
             if (isset($editando[$jsonField]) && is_string($editando[$jsonField])) {
                 $editando[$jsonField] = json_decode($editando[$jsonField], true) ?: [];
             }
@@ -291,6 +290,7 @@ $cliente_travado = !empty($c['cliente_id']);
   </div>
   <div style="display:flex;gap:8px">
     <?php if ($editando): ?>
+    <a href="anexos.php?os_id=<?= urlencode($editando['id']) ?>" class="btn btn-outline btn-sm">📸 Fotos</a>
     <a href="os_print.php?id=<?= urlencode($editando['id']) ?>&token=<?= urlencode(os_print_token($editando['id'])) ?>" target="_blank" class="btn btn-outline btn-sm">🖨️ Imprimir</a>
     <?php endif; ?>
     <a href="os.php" class="btn btn-outline btn-sm">← Voltar</a>
@@ -353,82 +353,85 @@ $cliente_travado = !empty($c['cliente_id']);
     </div>
   </div>
 
-  <!-- OBRA -->
+  <!-- DADOS DO VEÍCULO -->
   <div class="card" style="margin-bottom:16px">
     <div class="card-header">
-      <div class="card-title">02. Dados da Obra</div>
+      <div class="card-title">02. Dados do Veículo</div>
       <?php if ($editando): ?>
-      <span style="font-size:11px;color:var(--muted)">Código gerado: <strong><?= htmlspecialchars($editando['codigo']) ?></strong></span>
-      <?php else: ?>
-      <span style="font-size:11px;color:var(--muted)" id="preview-codigo">Código: aguardando...</span>
+      <span style="font-size:11px;color:var(--muted)">Protocolo: <strong><?= htmlspecialchars($editando['codigo']) ?></strong></span>
       <?php endif; ?>
     </div>
     <div class="card-body">
-      <div class="form-grid cols-3">
+      <div class="form-grid cols-4">
         <div class="form-field">
-          <label>Segmento</label>
-          <select name="segmento_cod" id="seg_cod" onchange="atualizarCodigo()">
-            <?php foreach ($segmentos as $cod => $nome): ?>
-            <option value="<?= $cod ?>" <?= ($c['segmento_cod'] ?? 'R') === $cod ? 'selected' : '' ?>><?= $cod ?> — <?= $nome ?></option>
+          <label>Placa *</label>
+          <input type="text" name="veiculo_placa" value="<?= htmlspecialchars($c['veiculo_placa'] ?? '') ?>" placeholder="ABC-1234" required>
+        </div>
+        <div class="form-field span-2">
+          <label>Modelo / Versão</label>
+          <input type="text" name="veiculo_modelo" value="<?= htmlspecialchars($c['veiculo_modelo'] ?? '') ?>" placeholder="Ex: BMW 320i M Sport">
+        </div>
+        <div class="form-field">
+          <label>Cor</label>
+          <input type="text" name="veiculo_cor" value="<?= htmlspecialchars($c['veiculo_cor'] ?? '') ?>" placeholder="Ex: Branco Perolizado">
+        </div>
+        <div class="form-field">
+          <label>KM Atual</label>
+          <input type="text" name="veiculo_km" value="<?= htmlspecialchars($c['veiculo_km'] ?? '') ?>" placeholder="Ex: 15.400 km">
+        </div>
+        <div class="form-field">
+          <label>Tamanho/Categoria (Preço)</label>
+          <select name="segmento_cod" id="veiculo-categoria" onchange="recalcAll()">
+            <?php foreach (segmentos() as $k => $v): ?>
+            <option value="<?= $k ?>" <?= ($c['segmento_cod'] ?? 'H') === $k ? 'selected' : '' ?>><?= $v ?></option>
             <?php endforeach; ?>
           </select>
         </div>
         <div class="form-field">
-          <label>Tipo de obra</label>
-          <select name="obra_tipo">
-            <?php foreach (['Forro de drywall','Sanca / Rebaixo','Divisória','Parede','Reforma / Reparo','Finalização','Facelift','Outro'] as $t): ?>
-            <option <?= ($c['obra_tipo'] ?? '') === $t ? 'selected' : '' ?>><?= $t ?></option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <div class="form-field">
-          <label>Status</label>
-          <select name="status" id="status-os" onchange="toggleNfFields()">
+          <label>Status do Serviço</label>
+          <select name="status" id="status-os">
             <?php foreach ($status_list as $k => $v): ?>
             <option value="<?= $k ?>" <?= ($c['status'] ?? 'rascunho') === $k ? 'selected' : '' ?>><?= $v ?></option>
             <?php endforeach; ?>
           </select>
         </div>
         <div class="form-field">
-          <label>Emissão</label>
+          <label>Entrada (Check-in)</label>
           <input type="date" name="emissao" value="<?= htmlspecialchars($c['emissao'] ?? date('Y-m-d')) ?>">
         </div>
         <div class="form-field">
-          <label>Validade</label>
+          <label>Previsão de Saída</label>
           <input type="date" name="validade" value="<?= htmlspecialchars($c['validade'] ?? $val_inicio) ?>">
         </div>
-        <div class="form-field">
-          <label>Prazo estimado</label>
-          <input type="text" name="obra_prazo" value="<?= htmlspecialchars($c['obra_prazo'] ?? '') ?>" placeholder="ex: 5 dias úteis">
-        </div>
-        <div class="form-field">
-          <label>Início previsto</label>
-          <input type="date" name="obra_inicio" value="<?= htmlspecialchars($c['obra_inicio'] ?? '') ?>">
-        </div>
-        <div class="form-field">
-          <label>Pé-direito</label>
-          <input type="text" name="obra_pe_dir" value="<?= htmlspecialchars($c['obra_pe_dir'] ?? '') ?>" placeholder="ex: 2,80 m">
-        </div>
-        <div class="form-field">
-          <label>Acesso</label>
-          <select name="obra_acesso">
-            <?php foreach (['Livre','Escada','Elevador','Escada + Elevador'] as $a): ?>
-            <option <?= ($c['obra_acesso'] ?? '') === $a ? 'selected' : '' ?>><?= $a ?></option>
-            <?php endforeach; ?>
-          </select>
-        </div>
-        <div class="form-field span-3">
-          <label>Fornecedor interno da execução</label>
-          <select name="fornecedor_id">
-            <option value="">Sem fornecedor vinculado</option>
-            <?php foreach ($fornecedores_list as $fornecedor): ?>
-            <option value="<?= (int)$fornecedor['id'] ?>" <?= (int)($c['fornecedor_id'] ?? 0) === (int)$fornecedor['id'] ? 'selected' : '' ?>>
-              <?= htmlspecialchars($fornecedor['nome']) ?>
-            </option>
-            <?php endforeach; ?>
-          </select>
-          <span class="hint">Dado interno para comparar preço, serviço e desempenho depois.</span>
-        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKLIST DE ENTRADA -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-header">
+      <div class="card-title">03. Checklist de Inspeção (Entrada)</div>
+    </div>
+    <div class="card-body">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px">
+        <?php 
+        $check_items = [
+            'Lataria (Riscos/Amassados)', 'Rodas / Pneus', 'Vidros / Retrovisores', 
+            'Interior / Estofados', 'Painel / Eletrônicos', 'Nível de Combustível',
+            'Estepe / Macaco / Triângulo', 'Itens Pessoais deixados', 'Luzes / Faróis'
+        ];
+        $checklist_db = $c['checklist'] ?? [];
+        foreach ($check_items as $item): 
+        ?>
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; padding:8px; border:1px solid var(--border); border-radius:6px; background:var(--bg)">
+          <input type="checkbox" name="checklist_item[]" value="<?= $item ?>" <?= in_array($item, $checklist_db) ? 'checked' : '' ?>>
+          <?= $item ?>
+        </label>
+        <?php endforeach; ?>
+      </div>
+      <div class="form-field" style="margin-top:16px">
+        <label>Notas Detalhadas da Inspeção (Avarias, Observações)</label>
+        <textarea name="obs_tecnicas" rows="3" placeholder="Descreva aqui qualquer detalhe importante notado na entrada do veículo..."><?= htmlspecialchars($c['obs_tecnicas'] ?? '') ?></textarea>
       </div>
     </div>
   </div>
@@ -436,7 +439,7 @@ $cliente_travado = !empty($c['cliente_id']);
   <!-- SERVIÇOS -->
   <div class="card" style="margin-bottom:16px">
     <div class="card-header">
-      <div class="card-title">03. Serviços</div>
+      <div class="card-title">04. Itens de Serviço & Estética</div>
     </div>
     <div class="card-body" style="padding:0">
       <div class="table-wrap">
@@ -714,10 +717,10 @@ function textoExplicacaoCnae(idx, valor) {
   
   // Lista de sugestões rápidas
   const sugestoes = [
-    {cod: '4330-4/03', desc: 'Gesso e Estuque (Sancas, forros, molduras, acabamento)'},
-    {cod: '4330-4/02', desc: 'Divisórias e Tetos (Instalação de Drywall, divisórias)'},
-    {cod: '4330-4/99', desc: 'Outras obras de acabamento técnico'},
-    {cod: '4744-0/99', desc: 'Comércio de materiais (Se houver revenda)'}
+    {cod: '4520-0/05', desc: 'Lavagem, lubrificação e polimento de veículos (Estética)'},
+    {cod: '4520-0/02', desc: 'Lanterna ou funilaria e pintura (Reparo estético)'},
+    {cod: '4520-0/01', desc: 'Manutenção e reparação mecânica (Geral)'},
+    {cod: '4732-6/00', desc: 'Comércio de lubrificantes e produtos (Venda direta)'}
   ];
 
   html += sugestoes.map(s => `
@@ -771,15 +774,27 @@ function removerLinha(idx) {
   if (row) { row.remove(); calcTotais(); }
 }
 
+const mults = <?= json_encode(multiplicadores_tamanho()) ?>;
+
 function calcRow(idx) {
   const row = document.getElementById('row-' + idx);
   if (!row) return;
   const m = parseFloat(row.querySelector('[name="item_medida[]"]')?.value) || 0;
   const v = parseFloat(row.querySelector('[name="item_vunit[]"]')?.value)  || 0;
-  const t = m * v;
+  const cat = document.getElementById('veiculo-categoria').value;
+  const fator = mults[cat] || 1;
+  
+  const t = m * (v * fator);
   const cell = document.getElementById('total-row-' + idx);
   if (cell) cell.textContent = 'R$ ' + t.toFixed(2).replace('.', ',');
   calcTotais();
+}
+
+function recalcAll() {
+    document.querySelectorAll('[id^="row-"]').forEach(row => {
+        const idx = row.id.replace('row-', '');
+        calcRow(idx);
+    });
 }
 
 function calcTotais() {
@@ -788,7 +803,9 @@ function calcTotais() {
     const m = parseFloat(el.value) || 0;
     const vEl = document.querySelectorAll('[name="item_vunit[]"]')[i];
     const v = parseFloat(vEl?.value) || 0;
-    sub += m * v;
+    const cat = document.getElementById('veiculo-categoria').value;
+    const fator = mults[cat] || 1;
+    sub += m * (v * fator);
   });
   const desc = parseFloat(document.getElementById('desconto')?.value?.replace(',','.')) || 0;
   const tot  = Math.max(0, sub - desc);

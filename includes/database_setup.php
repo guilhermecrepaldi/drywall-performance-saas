@@ -58,6 +58,13 @@ function database_setup_run(?PDO $db = null): void {
     database_setup_add_column($db, 'os', 'comentario_cliente', 'TEXT NULL');
     database_setup_add_column($db, 'os', 'comentario_interno', 'TEXT NULL');
     database_setup_add_column($db, 'os', 'fornecedor_id', 'INT UNSIGNED NULL');
+    
+    /* Automotive Extensions */
+    database_setup_add_column($db, 'os', 'veiculo_placa', 'VARCHAR(20) NULL');
+    database_setup_add_column($db, 'os', 'veiculo_modelo', 'VARCHAR(120) NULL');
+    database_setup_add_column($db, 'os', 'veiculo_cor', 'VARCHAR(50) NULL');
+    database_setup_add_column($db, 'os', 'veiculo_km', 'VARCHAR(50) NULL');
+    database_setup_add_column($db, 'os', 'checklist', 'LONGTEXT NULL');
 
     $driver = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
     $nowSql = ($driver === 'sqlite') ? "datetime('now')" : "NOW()";
@@ -560,21 +567,21 @@ function database_setup_run(?PDO $db = null): void {
     database_setup_insert_ignore(
         $db,
         'INSERT INTO usuarios (email, usuario, senha) VALUES (?, ?, ?)',
-        ['admin@drywallperformance.com.br', AUTH_USER, AUTH_PASS]
+        ['contato@premiumdetailing.com.br', AUTH_USER, AUTH_PASS]
     );
 
     $defaults = [
-        'empresa_nome' => 'Drywall Performance',
-        'empresa_cnpj' => '66.472.550/0001-11',
-        'empresa_endereco' => '',
+        'empresa_nome' => 'Premium Detailing',
+        'empresa_cnpj' => '00.000.000/0001-00',
+        'empresa_endereco' => 'Av. Automotiva, 1000 - São Paulo/SP',
         'empresa_telefone' => '(11) 91359-5985',
-        'empresa_email' => 'silvagui8@gmail.com',
+        'empresa_email' => 'contato@premiumdetailing.com.br',
         'empresa_logo' => '',
-        'pagamento_padrao' => 'Entrada na aprovação e saldo na entrega.',
-        'validade_padrao_dias' => '10',
-        'valor_hora_mao_obra' => '85',
-        'overhead_padrao_percentual' => '15',
-        'margem_padrao_percentual' => '25',
+        'pagamento_padrao' => 'Entrada de 50% no check-in e saldo na entrega do veículo.',
+        'validade_padrao_dias' => '7',
+        'valor_hora_mao_obra' => '120',
+        'overhead_padrao_percentual' => '20',
+        'margem_padrao_percentual' => '35',
     ];
 
     foreach ($defaults as $chave => $valor) {
@@ -609,21 +616,21 @@ function database_setup_run(?PDO $db = null): void {
     $stmtCountProdutos = $db->query('SELECT COUNT(*) FROM produtos');
     if ((int)$stmtCountProdutos->fetchColumn() === 0) {
         $produtos = [
-            ['Chapas', 'Chapa drywall ST 12,5 mm', 'un'],
-            ['Chapas', 'Chapa drywall RU resistente a umidade', 'un'],
-            ['Chapas', 'Chapa drywall RF resistente ao fogo', 'un'],
-            ['Perfis', 'Guia drywall 48/70/90', 'barra'],
-            ['Perfis', 'Montante drywall 48/70/90', 'barra'],
-            ['Perfis', 'Canaleta F530', 'barra'],
-            ['Perfis', 'Cantoneira / tabica', 'barra'],
-            ['Fixacao', 'Parafuso ponta agulha 25 mm', 'cento'],
-            ['Fixacao', 'Parafuso ponta broca 4,3 x 12', 'cento'],
-            ['Fixacao', 'Bucha e parafuso para alvenaria', 'un'],
-            ['Acabamento', 'Massa para drywall', 'kg'],
-            ['Acabamento', 'Fita papel / fita telada', 'rolo'],
-            ['Acabamento', 'Lixa para drywall', 'un'],
-            ['Isolamento', 'La de vidro / la de rocha', 'm2'],
-            ['Suspensao', 'Tirante / pendural / regulador', 'un'],
+            ['Polimento', 'Composto de Corte Pesado', 'L'],
+            ['Polimento', 'Composto de Refino', 'L'],
+            ['Polimento', 'Lustrador de Alto Brilho', 'L'],
+            ['Proteção', 'Vitrificador de Pintura 9H', 'kit'],
+            ['Proteção', 'Selante Sintético Longa Duração', 'un'],
+            ['Proteção', 'Cera de Carnaúba Premium', 'un'],
+            ['Limpeza', 'Shampoo Neutro Detailing (Concentrado)', 'L'],
+            ['Limpeza', 'Desengraxante de Motor / APC', 'L'],
+            ['Limpeza', 'Limpador de Couro e Plásticos', 'L'],
+            ['Acessórios', 'Boina de Lã de Carneiro', 'un'],
+            ['Acessórios', 'Boina de Espuma Média/Macia', 'un'],
+            ['Acessórios', 'Pano de Microfibra 400 GSM', 'un'],
+            ['Acessórios', 'Toalha de Secagem Twist', 'un'],
+            ['Vidros', 'Cristalizador de Vidros / Repelente', 'un'],
+            ['Rodas', 'Limpa Rodas e Ferroso', 'L'],
         ];
         $stmtProduto = $db->prepare('INSERT INTO produtos (categoria, nome, unidade) VALUES (?, ?, ?)');
         foreach ($produtos as $produto) {

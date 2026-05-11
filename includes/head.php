@@ -4,24 +4,21 @@ require_once __DIR__ . '/auth.php';
 // auth_required(); 
 
 $nav_groups = [
-    'Mission Control' => [
-        ['key' => 'dashboard', 'label' => 'Dashboard / Visão Geral', 'url' => 'index.php', 'icon' => '⬢'],
+    'Principal' => [
+        ['key' => 'dashboard', 'label' => 'Painel Geral', 'url' => 'index.php', 'icon' => '⬢'],
     ],
-    'Coordenação & Comercial' => [
-        ['key' => 'agenda', 'label' => 'Coordenação / Visitas', 'url' => 'agenda.php', 'icon' => '📅'],
-        ['key' => 'projetos', 'label' => 'Projetos (Leads)', 'url' => 'desenvolvimento.php', 'icon' => '⎔'],
-        ['key' => 'clientes', 'label' => 'Base de Clientes', 'url' => 'clientes.php', 'icon' => '👤'],
+    'Atendimento' => [
+        ['key' => 'agenda', 'label' => 'Agenda / Check-in', 'url' => 'agenda.php', 'icon' => '📅'],
+        ['key' => 'clientes', 'label' => 'Clientes / Veículos', 'url' => 'clientes.php', 'icon' => '👤'],
     ],
-    'Execução & Qualidade' => [
-        ['key' => 'os', 'label' => 'Work Orders / OS', 'url' => 'os.php', 'icon' => '☰'],
-        ['key' => 'pipeline', 'label' => 'Pipeline de Obras', 'url' => 'os_pipeline.php', 'icon' => '⚯'],
-        ['key' => 'anexos', 'label' => 'Arquivos / Base', 'url' => 'anexos.php', 'icon' => '📂'],
+    'Serviços' => [
+        ['key' => 'os', 'label' => 'Ordens de Serviço', 'url' => 'os.php', 'icon' => '🚗'],
+        ['key' => 'pipeline', 'label' => 'Status da Garagem', 'url' => 'os_pipeline.php', 'icon' => '⚯'],
+        ['key' => 'fotos', 'label' => 'Banco de Fotos', 'url' => 'fotos_geral.php', 'icon' => '📸'],
     ],
-    'Gestão Financeira' => [
-        ['key' => 'financeiro', 'label' => 'Custos & Caixa', 'url' => 'financeiro.php', 'icon' => '⌥'],
-        ['key' => 'produtos', 'label' => 'Insumos / Produtos', 'url' => 'produtos.php', 'icon' => '📚'],
-    ],
-    'Infraestrutura' => [
+    'Gestão' => [
+        ['key' => 'financeiro', 'label' => 'Financeiro', 'url' => 'financeiro.php', 'icon' => '⌥'],
+        ['key' => 'produtos', 'label' => 'Insumos / Preços', 'url' => 'produtos.php', 'icon' => '📚'],
         ['key' => 'configuracoes', 'label' => 'Configurações', 'url' => 'configuracoes.php', 'icon' => '⚙'],
     ]
 ];
@@ -37,8 +34,11 @@ if (empty($breadcrumbs)) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($page_title ?? 'Sistema') ?> | Drywall Performance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title><?= htmlspecialchars($page_title ?? 'Sistema') ?> | Auto Detail Manager</title>
     <link rel="stylesheet" href="assets/style.css?v=<?= time() ?>">
     <script src="assets/js/scripts.js?v=<?= time() ?>" defer></script>
 </head>
@@ -47,8 +47,8 @@ if (empty($breadcrumbs)) {
 <div class="app-wrapper">
     <aside class="sidebar">
         <div class="sidebar-logo">
-            <div class="app-logo-mark">D</div>
-            <div class="app-logo-text">DRYWALL <span style="color:var(--text-dim);font-weight:400;font-size:10px">PERFORMANCE</span></div>
+            <div class="app-logo-mark">A</div>
+            <div class="app-logo-text">AUTO <span style="color:var(--text-dim);font-weight:400;font-size:10px">DETAIL MANAGER</span></div>
         </div>
 
         <nav class="sidebar-nav">

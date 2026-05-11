@@ -49,12 +49,74 @@ $clientes_recentes = array_slice(array_reverse($clientes), 0, 5);
 </style>
 
 <!-- AÇÕES RÁPIDAS -->
-<div class="quick-actions">
-    <a href="os.php?action=new" class="btn btn-primary">+ Nova OS</a>
-    <a href="desenvolvimento.php" class="btn btn-outline">+ Novo Lead</a>
-    <a href="agenda.php" class="btn btn-outline">+ Agendar Visita</a>
+<!-- DASHBOARD MOBILE (SHORTCUTS) -->
+<div class="mobile-only" style="margin-bottom: 30px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+        <a href="os.php?action=new" class="mobile-shortcut-btn" style="background: var(--red); color: #fff; grid-column: span 2;">
+            <span class="icon">🚀</span>
+            <div class="label">NOVA ORDEM / CHECK-IN</div>
+        </a>
+        <a href="os_pipeline.php" class="mobile-shortcut-btn">
+            <span class="icon">🚗</span>
+            <div class="label">VER GARAGEM</div>
+        </a>
+        <a href="fotos_geral.php" class="mobile-shortcut-btn">
+            <span class="icon">📸</span>
+            <div class="label">BANCO FOTOS</div>
+        </a>
+        <a href="agenda.php" class="mobile-shortcut-btn">
+            <span class="icon">📅</span>
+            <div class="label">AGENDA</div>
+        </a>
+        <a href="financeiro.php" class="mobile-shortcut-btn">
+            <span class="icon">💰</span>
+            <div class="label">CAIXA</div>
+        </a>
+    </div>
+</div>
+
+<style>
+.mobile-only { display: none; }
+.mobile-shortcut-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.mobile-shortcut-btn:active { transform: scale(0.96); opacity: 0.8; }
+.mobile-shortcut-btn .icon { font-size: 24px; margin-bottom: 8px; }
+.mobile-shortcut-btn .label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--navy); }
+
+@media (max-width: 768px) {
+    .mobile-only { display: block; }
+    .quick-actions { display: none; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .stat-card { padding: 12px; }
+    .stat-value { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+}
+</style>
+
+<!-- AÇÕES RÁPIDAS (DESKTOP) -->
+<div class="quick-actions desktop-only">
+    <a href="os.php?action=new" class="btn btn-primary">+ Nova OS / Check-in</a>
+    <a href="os_pipeline.php" class="btn btn-outline">Status da Garagem</a>
+    <a href="agenda.php" class="btn btn-outline">Consultar Agenda</a>
     <a href="financeiro.php" class="btn btn-ghost" style="margin-left:auto">Resumo Financeiro &rarr;</a>
 </div>
+
+<style>
+@media (max-width: 768px) {
+    .desktop-only { display: none; }
+}
+</style>
 
 <!-- GRID DE ESTATÍSTICAS -->
 <div class="stats-grid">
@@ -194,8 +256,8 @@ $clientes_recentes = array_slice(array_reverse($clientes), 0, 5);
     <!-- CARD: NOVOS CLIENTES / LEADS -->
     <div class="card">
       <div class="card-header">
-        <div class="card-title">Novos Leads</div>
-        <a href="clientes.php" class="btn btn-ghost btn-sm">Base CRM</a>
+        <div class="card-title">Status dos Atendimentos</div>
+        <a href="os.php" class="btn btn-ghost btn-sm">Base CRM</a>
       </div>
       <div class="card-body" style="padding:16px;">
         <?php if (empty($clientes_recentes)): ?>

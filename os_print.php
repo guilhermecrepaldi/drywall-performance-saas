@@ -13,11 +13,32 @@ $rows = ler_db('os', ['id' => $id]);
 if (empty($rows)) { die('OS não encontrada.'); }
 $os = $rows[0];
 if (isset($os['itens']) && is_string($os['itens'])) $os['itens'] = json_decode($os['itens'], true);
-foreach (['incluso', 'nao_incluso'] as $jsonField) {
+foreach (['incluso', 'nao_incluso', 'checklist'] as $jsonField) {
     if (isset($os[$jsonField]) && is_string($os[$jsonField])) {
         $os[$jsonField] = json_decode($os[$jsonField], true) ?: [];
     }
 }
+
+global $pdo;
+$stmtPhotos = $pdo->prepare("SELECT * FROM anexos WHERE os_id = ? ORDER BY CASE categoria WHEN 'entrada' THEN 1 WHEN 'processo' THEN 2 WHEN 'entrega' THEN 3 WHEN 'motor' THEN 4 WHEN 'interior' THEN 5 WHEN 'detalhe' THEN 6 ELSE 7 END, criado_em ASC");
+$stmtPhotos->execute([$id]);
+$fotos_raw = $stmtPhotos->fetchAll(PDO::FETCH_ASSOC);
+
+$fotos_grupos = [];
+foreach ($fotos_raw as $f) {
+    $cat = $f['categoria'] ?: 'outro';
+    if (!isset($fotos_grupos[$cat])) $fotos_grupos[$cat] = [];
+    $fotos_grupos[$cat][] = $f;
+}
+$cat_labels = [
+    'entrada' => 'Check-in / Entrada',
+    'processo' => 'Processo de Detalhamento',
+    'entrega' => 'Finalizado / Entrega',
+    'motor' => 'Motor & Chassi',
+    'interior' => 'Interior & Estofados',
+    'detalhe' => 'Destaques e Detalhes',
+    'outro' => 'Outros Registros'
+];
 
 $seg_labels = segmentos();
 ?>
@@ -143,7 +164,7 @@ body{font-family:'Barlow',sans-serif;background:#f0f4f8;color:#1a2a3a;padding:24
       <img src="assets/logo.png" alt="Drywall Performance"
            onerror="this.style.display='none';document.getElementById('lt').style.display='block'">
       <div id="lt" class="logo-txt" style="display:none">
-        <div class="l1">DRYWALL</div><div class="l2">PERFORMANCE</div>
+        <div class="l1">PREMIUM</div><div class="l2">DETAILING</div>
       </div>
     </div>
     <div class="hdr-center">
@@ -161,9 +182,9 @@ body{font-family:'Barlow',sans-serif;background:#f0f4f8;color:#1a2a3a;padding:24
   </div>
   <div class="red-stripe"></div>
   <div class="co-bar">
-    <span><strong>DRYWALL PERFORMANCE LTDA</strong> · CNPJ 66.472.550/0001-11</span>
+    <span><strong>PREMIUM DETAILING</strong> · Estética Automotiva de Alta Performance</span>
     <span>Guilherme Crepaldi · (11) 91359-5985</span>
-    <span>drywallperformance.com.br · @drywallperformance</span>
+    <span>premiumdetailing.com.br · @premiumdetailing</span>
   </div>
 
   <!-- 01 CLIENTE -->
@@ -179,18 +200,29 @@ body{font-family:'Barlow',sans-serif;background:#f0f4f8;color:#1a2a3a;padding:24
     </div>
   </div>
 
-  <!-- 02 OBRA -->
+  <!-- 02 VEÍCULO -->
   <div class="sec">
-    <div class="sec-lbl"><h3>02. Dados da Obra</h3></div>
-    <div class="field-grid cols-3">
-      <div class="field"><label>Tipo de obra</label><div class="val"><?= htmlspecialchars($os['obra_tipo'] ?? '') ?></div></div>
-      <div class="field"><label>Segmento</label><div class="val"><?= htmlspecialchars($os['obra_segmento'] ?? ($seg_labels[$os['segmento_cod']??'R'] ?? '')) ?></div></div>
-      <div class="field"><label>Prazo estimado</label><div class="val"><?= htmlspecialchars($os['obra_prazo'] ?? '') ?></div></div>
-      <div class="field"><label>Início previsto</label><div class="val"><?= isset($os['obra_inicio']) && $os['obra_inicio'] ? date('d/m/Y', strtotime($os['obra_inicio'])) : '' ?></div></div>
-      <div class="field"><label>Pé-direito</label><div class="val"><?= htmlspecialchars($os['obra_pe_dir'] ?? '') ?></div></div>
-      <div class="field"><label>Acesso</label><div class="val"><?= htmlspecialchars($os['obra_acesso'] ?? '') ?></div></div>
+    <div class="sec-lbl"><h3>02. Dados do Veículo</h3></div>
+    <div class="field-grid cols-4">
+      <div class="field"><label>Placa</label><div class="val" style="font-family:monospace;font-weight:700"><?= htmlspecialchars($os['veiculo_placa'] ?? '') ?></div></div>
+      <div class="field span-2"><label>Modelo / Versão</label><div class="val"><?= htmlspecialchars($os['veiculo_modelo'] ?? '') ?></div></div>
+      <div class="field"><label>Cor / KM</label><div class="val"><?= htmlspecialchars($os['veiculo_cor'] ?? '') ?> <?= $os['veiculo_km'] ? ' / ' . htmlspecialchars($os['veiculo_km']) : '' ?></div></div>
     </div>
   </div>
+
+  <!-- 03 CHECKLIST -->
+  <?php if (!empty($os['checklist'])): ?>
+  <div class="sec">
+    <div class="sec-lbl"><h3>03. Checklist de Inspeção de Entrada</h3></div>
+    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px">
+      <?php foreach ($os['checklist'] as $chk): ?>
+      <div style="font-size:11px; display:flex; align-items:center; gap:5px">
+        <span style="color:var(--red); font-weight:900">✓</span> <?= htmlspecialchars($chk) ?>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+  <?php endif; ?>
 
   <!-- 03 SERVIÇOS -->
   <div class="sec">
@@ -268,25 +300,45 @@ body{font-family:'Barlow',sans-serif;background:#f0f4f8;color:#1a2a3a;padding:24
     <div class="field" style="margin-top:8px"><label>Observações de pagamento</label><div class="val"><?= nl2br(htmlspecialchars($os['pagto_obs'])) ?></div></div>
     <?php endif; ?>
     <?php if (!empty($os['nota_fiscal'])): ?>
-    <div style="margin-top:10px;font-size:11px;color:var(--navy)">🧾 <strong>Nota Fiscal inclusa</strong> · CNAE 4330-4/04 · 4330-4/99 · 4744-0/99</div>
+    <div style="margin-top:10px;font-size:11px;color:var(--navy)">🧾 <strong>Nota Fiscal inclusa</strong> · CNAE 4520-0/05 (Estética Automotiva)</div>
     <?php endif; ?>
   </div>
 
-  <!-- 05 OBS -->
-  <?php if (!empty($os['obs_tecnicas'])): ?>
+  <!-- 05 OBS / FOTOS -->
   <div class="sec">
-    <div class="sec-lbl"><h3>05. Observações Finais</h3></div>
-    <div style="font-size:12px;line-height:1.65;color:#1a2a3a"><?= nl2br(htmlspecialchars($os['obs_tecnicas'])) ?></div>
+    <div class="sec-lbl"><h3>05. Observações & Registro Fotográfico</h3></div>
+    <?php if (!empty($os['obs_tecnicas'])): ?>
+    <div style="font-size:12px;line-height:1.65;color:#1a2a3a;margin-bottom:15px"><?= nl2br(htmlspecialchars($os['obs_tecnicas'])) ?></div>
+    <?php endif; ?>
+
+    <?php if (!empty($fotos_grupos)): ?>
+      <?php foreach ($fotos_grupos as $cat => $grupo): ?>
+      <div style="margin-top:15px">
+        <h4 style="font-size:10px; color:var(--red); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; border-bottom:1px solid #eee; padding-bottom:4px">
+          <?= $cat_labels[$cat] ?? ucfirst($cat) ?>
+        </h4>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px">
+          <?php foreach ($grupo as $foto): ?>
+          <div style="border:1px solid var(--border); border-radius:4px; overflow:hidden">
+            <img src="uploads/anexos/<?= htmlspecialchars($foto['arquivo']) ?>" style="width:100%; height:140px; object-fit:cover; display:block">
+            <?php if ($foto['legenda']): ?>
+            <div style="font-size:9px; padding:4px; background:#f9f9f9; text-align:center"><?= htmlspecialchars($foto['legenda']) ?></div>
+            <?php endif; ?>
+          </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+      <?php endforeach; ?>
+    <?php endif; ?>
   </div>
-  <?php endif; ?>
 
   <!-- FOOTER -->
   <div class="doc-footer">
     <div class="nbr-txt">
-      <strong>PADRÃO TÉCNICO</strong>
-      DRYWALL PERFORMANCE segue as normatizações NBR 15758 e NBR 14715.<br>
-      Todos os produtos são normatizados e passam pelo processo de auditoria.<br>
-      Instalação certificada SENAI.
+      <strong>PADRÃO DE QUALIDADE</strong>
+      PREMIUM DETAILING utiliza produtos de alta performance e processos certificados.<br>
+      Toda manutenção segue padrões internacionais de estética automotiva.<br>
+      Equipe especializada em detalhamento técnico.
     </div>
     <div class="assin-wrap">
       <div class="assin"><div class="assin-line"></div><div class="assin-lbl">Assinatura do Cliente</div></div>

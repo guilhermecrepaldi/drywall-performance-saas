@@ -29,16 +29,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login | Drywall Performance</title>
+<title>Login | Premium Detailing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
-    font-family: 'Barlow', sans-serif;
-    background: #0d1b2a;
+    font-family: 'Outfit', sans-serif;
+    background: #0b0f19;
+    background-image: radial-gradient(circle at 20% 30%, #1a2235 0%, #0b0f19 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -48,155 +49,146 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   .login-wrap {
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
   }
 
   .login-logo {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
   }
 
   .login-logo .l1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 32px;
+    font-size: 38px;
     font-weight: 800;
     color: #fff;
-    letter-spacing: 1px;
+    letter-spacing: -1px;
     text-transform: uppercase;
   }
 
   .login-logo .l2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: #1abc9c;
-    letter-spacing: 2px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #dc2626;
+    letter-spacing: 4px;
     text-transform: uppercase;
-  }
-
-  .login-logo .l3 {
-    font-size: 12px;
-    color: #5a7080;
-    margin-top: 4px;
-    letter-spacing: 1px;
+    margin-top: -5px;
   }
 
   .login-card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 36px 32px 32px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   }
 
   .login-card h2 {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 600;
-    color: #0d1b2a;
-    margin-bottom: 24px;
+    color: #fff;
+    margin-bottom: 30px;
+    text-align: center;
   }
 
   .field {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   .field label {
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
-    color: #3a5060;
-    margin-bottom: 6px;
-    letter-spacing: 0.4px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
   .field input {
     width: 100%;
-    padding: 10px 14px;
-    border: 1.5px solid #d0d9e2;
-    border-radius: 6px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    color: #0d1b2a;
-    background: #f8fafc;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    padding: 16px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 16px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
     outline: none;
   }
 
   .field input:focus {
-    border-color: #1abc9c;
-    box-shadow: 0 0 0 3px rgba(26,188,156,0.15);
-    background: #fff;
-  }
-
-  .erro-msg {
-    background: #fef2f2;
-    border: 1px solid #fca5a5;
-    border-radius: 6px;
-    color: #c0392b;
-    font-size: 13px;
-    padding: 10px 14px;
-    margin-bottom: 16px;
+    border-color: #dc2626;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15);
   }
 
   .btn-login {
     width: 100%;
-    padding: 12px;
-    background: #0d6e5a;
+    padding: 16px;
+    background: #dc2626;
     color: #fff;
     border: none;
-    border-radius: 6px;
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.15s;
-    margin-top: 8px;
+    transition: all 0.2s;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 
-  .btn-login:hover { background: #0a5a4a; }
-  .btn-login:active { background: #084840; }
+  .btn-login:hover { background: #ef4444; transform: translateY(-2px); }
+  .btn-login:active { transform: translateY(0); }
 
   .login-footer {
     text-align: center;
-    margin-top: 20px;
-    font-size: 12px;
-    color: #5a7080;
+    margin-top: 30px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
   }
 </style>
 </head>
 <body>
 <div class="login-wrap">
   <div class="login-logo">
-    <div class="l1">Drywall</div>
-    <div class="l2">Performance</div>
-    <div class="l3">Sistema v2.0</div>
+    <div class="l1">PREMIUM</div>
+    <div class="l2">Detailing</div>
   </div>
 
   <div class="login-card">
-    <h2>Entrar no sistema</h2>
+    <h2>Acesso Restrito</h2>
 
     <?php if ($erro): ?>
-    <div class="erro-msg"><?= htmlspecialchars($erro) ?></div>
+    <div style="background: rgba(220,38,38,0.1); border: 1px solid #dc2626; color: #fff; padding: 12px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; text-align: center;">
+        <?= htmlspecialchars($erro) ?>
+    </div>
     <?php endif; ?>
 
     <form method="POST" action="login.php<?= isset($_GET['volta']) ? '?volta='.urlencode($_GET['volta']) : '' ?>">
       <?= csrf_field() ?>
       <div class="field">
-        <label for="usuario">Usuário</label>
+        <label for="usuario">Usuário de Operação</label>
         <input type="text" id="usuario" name="usuario"
                value="<?= htmlspecialchars($_POST['usuario'] ?? '') ?>"
                autocomplete="username" autofocus required>
       </div>
       <div class="field">
-        <label for="senha">Senha</label>
+        <label for="senha">Senha de Acesso</label>
         <input type="password" id="senha" name="senha"
                autocomplete="current-password" required>
       </div>
-      <button type="submit" class="btn-login">Entrar</button>
+      <button type="submit" class="btn-login">Acessar Painel</button>
     </form>
   </div>
 
   <div class="login-footer">
-    CNPJ 66.472.550/0001-11 &nbsp;·&nbsp; Guilherme Crepaldi
+    Gestão Automotiva de Alta Performance &nbsp;·&nbsp; v2026
   </div>
 </div>
 </body>

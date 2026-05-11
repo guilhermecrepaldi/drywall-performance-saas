@@ -51,16 +51,17 @@ include 'includes/head.php';
                     <div class="form-field">
                         <label>Categoria</label>
                         <select name="categoria" id="categoria-input">
-                            <option value="antes">Antes da Obra</option>
-                            <option value="obra" selected>Durante a Obra</option>
-                            <option value="depois">Depois da Obra (Finalizado)</option>
-                            <option value="pagamento">Comprovante de Pagamento</option>
-                            <option value="outro">Outro / Técnico</option>
+                            <option value="entrada" selected>Entrada / Check-in (Estado inicial)</option>
+                            <option value="processo">Processo / Detalhamento</option>
+                            <option value="entrega">Entrega / Finalizado</option>
+                            <option value="motor">Motor / Chassi</option>
+                            <option value="interior">Interior / Estofados</option>
+                            <option value="outro">Outro / Documentos</option>
                         </select>
                     </div>
                     <div class="form-field span-2">
                         <label>Legenda / Descrição Curta</label>
-                        <input type="text" name="legenda" id="legenda-input" placeholder="Ex: Detalhe da sanca na sala">
+                        <input type="text" name="legenda" id="legenda-input" placeholder="Ex: Risco na porta traseira esquerda">
                     </div>
                     <input type="hidden" name="os_id" value="<?= htmlspecialchars($os_id) ?>">
                     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
@@ -80,9 +81,16 @@ include 'includes/head.php';
         </div>
 
         <!-- GRADE DE FOTOS -->
-        <div class="card">
-            <div class="card-header">
+            <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
                 <div class="card-title">Arquivos Anexados</div>
+                <div id="filtros-galeria" style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn btn-ghost btn-sm active" onclick="filtrarGaleria('todos', this)">TUDO</button>
+                    <button class="btn btn-ghost btn-sm" onclick="filtrarGaleria('entrada', this)">CHECK-IN</button>
+                    <button class="btn btn-ghost btn-sm" onclick="filtrarGaleria('processo', this)">PROCESSO</button>
+                    <button class="btn btn-ghost btn-sm" onclick="filtrarGaleria('entrega', this)">ENTREGA</button>
+                    <button class="btn btn-ghost btn-sm" onclick="filtrarGaleria('interior', this)">INTERIOR</button>
+                    <button class="btn btn-ghost btn-sm" onclick="filtrarGaleria('motor', this)">MOTOR</button>
+                </div>
             </div>
             <div class="card-body">
                 <div id="galeria-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px;">
@@ -174,14 +182,30 @@ include 'includes/head.php';
 <script>
 const osId = "<?= $os_id ?>";
 
+let todasAsFotos = [];
+let filtroAtual = 'todos';
+
 async function carregarGaleria() {
     const res = await fetch(`api/anexos_api.php?acao=listar&os_id=${osId}`);
     const json = await res.json();
-    
+    todasAsFotos = json.dados || [];
+    renderizarGaleria();
+}
+
+function filtrarGaleria(cat, btn) {
+    filtroAtual = cat;
+    document.querySelectorAll('#filtros-galeria .btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderizarGaleria();
+}
+
+function renderizarGaleria() {
     const grid = document.getElementById('galeria-grid');
-    if (json.dados && json.dados.length > 0) {
+    const fotos = filtroAtual === 'todos' ? todasAsFotos : todasAsFotos.filter(f => f.categoria === filtroAtual);
+    
+    if (fotos.length > 0) {
         document.getElementById('galeria-vazia').style.display = 'none';
-        grid.innerHTML = json.dados.map(f => `
+        grid.innerHTML = fotos.map(f => `
             <div class="foto-card" id="foto-${f.id}">
                 <span class="badge-foto">${f.categoria}</span>
                 <button class="btn-delete-foto" onclick="deletarAnexo(${f.id})">✕</button>
@@ -200,7 +224,7 @@ async function carregarGaleria() {
             </div>
         `).join('');
     } else {
-        grid.innerHTML = '<div class="empty-state" id="galeria-vazia"><div class="icon">📷</div><p>Nenhuma foto anexada ainda.</p></div>';
+        grid.innerHTML = '<div class="empty-state" id="galeria-vazia"><div class="icon">📷</div><p>Nenhuma foto nesta categoria.</p></div>';
     }
 }
 

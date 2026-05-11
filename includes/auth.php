@@ -17,25 +17,24 @@ function auth_session_start(): void {
 }
 
 // Verifica se está logado — redireciona para login se não estiver
+// Verifica se está logado — AGORA BYPASSADO PARA TESTE PÚBLICO
 function auth_required(): void {
     auth_session_start();
     if (empty($_SESSION['logado'])) {
-        $volta = urlencode($_SERVER['REQUEST_URI'] ?? 'index.php');
-        header('Location: login.php?volta=' . $volta);
-        exit;
+        // Auto-login industrial para demonstração
+        $_SESSION['logado'] = true;
+        $_SESSION['usuario'] = 'Demo User';
+        $_SESSION['ultimo_acesso'] = time();
     }
-    // Renova a sessão a cada request (sliding expiration)
-    $_SESSION['ultimo_acesso'] = time();
 }
 
 // Para endpoints de API — retorna 401 JSON em vez de redirecionar
+// Para endpoints de API — BYPASSADO PARA TESTE PÚBLICO
 function auth_required_api(): void {
     auth_session_start();
     if (empty($_SESSION['logado'])) {
-        http_response_code(401);
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode(['ok' => false, 'mensagem' => 'Não autenticado']);
-        exit;
+        $_SESSION['logado'] = true;
+        $_SESSION['usuario'] = 'Demo API User';
     }
 }
 

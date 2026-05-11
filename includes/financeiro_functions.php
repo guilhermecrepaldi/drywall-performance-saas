@@ -116,7 +116,9 @@ function calcular_custo_os($os_id): array {
     $valor_sugerido = $margem >= 100 ? $custo_total : $custo_total / max(0.01, (1 - $margem / 100));
     $valor_orcado = (float)($os['total_geral'] ?? 0);
     $custo_real = isset($registro['custo_real']) && $registro['custo_real'] !== null ? (float)$registro['custo_real'] : $custo_total;
-    $lucro = $valor_orcado - $custo_real;
+    $comissao_percentual = (float)($registro['comissao_percentual'] ?? financeiro_config_valor('comissao_padrao_percentual', 0));
+    $comissao_valor = $valor_orcado * ($comissao_percentual / 100);
+    $lucro = $valor_orcado - $custo_real - $comissao_valor;
 
     return [
         'sucesso' => true,
@@ -128,6 +130,8 @@ function calcular_custo_os($os_id): array {
             'custo_mao_obra' => round($custo_mao_obra, 2),
             'overhead' => round($overhead, 2),
             'margem' => round($margem, 2),
+            'comissao_percentual' => round($comissao_percentual, 2),
+            'comissao_valor' => round($comissao_valor, 2),
             'custo_total' => round($custo_total, 2),
             'custo_real' => round($custo_real, 2),
             'valor_sugerido' => round($valor_sugerido, 2),

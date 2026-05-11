@@ -12,7 +12,7 @@ foreach ($precos as $p) {
 ?>
 
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-  <p style="font-size:13px;color:var(--muted)">Atualize os preços abaixo. Os custos por m² são calculados automaticamente.</p>
+  <p style="font-size:13px;color:var(--muted)">Atualize os preços abaixo. Os custos unitários são calculados automaticamente conforme o rendimento.</p>
   <button class="btn btn-red" onclick="salvarPrecos()">💾 Salvar preços</button>
 </div>
 
@@ -27,13 +27,13 @@ foreach ($precos as $p) {
     <table>
       <thead>
         <tr>
-          <th>Produto</th>
-          <th>Dimensão / Unid.</th>
-          <th style="width:100px">Área (m²)</th>
+          <th>Produto / Serviço</th>
+          <th>Unid.</th>
+          <th style="width:100px">Rendimento</th>
           <th style="width:120px">Preço (R$) 🔵</th>
-          <th style="width:110px">Custo/m²</th>
+          <th style="width:110px">Custo Base</th>
           <th style="width:80px">Perda (%)</th>
-          <th style="width:120px">Custo c/ perda</th>
+          <th style="width:120px">Custo Final</th>
         </tr>
       </thead>
       <tbody>
