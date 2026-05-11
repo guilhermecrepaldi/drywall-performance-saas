@@ -1,5 +1,5 @@
 <?php
-// includes/head.php — Antigravity v2026 Drywall Interface
+// includes/head.php — Antigravity v2026 Detailing Interface
 require_once __DIR__ . '/auth.php';
 // auth_required(); 
 

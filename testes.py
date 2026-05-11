@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Testes para o Sistema Drywall Performance v1.0
+Testes para o Sistema Premium Detailing v1.0
 Executa validações de lógica, cálculos e integridade de dados.
 Baseado em padrões de mercado para sistemas de gestão de obras/quotas.
 """
@@ -10,7 +10,7 @@ import os
 from datetime import datetime, timedelta
 
 # Caminhos dos arquivos
-BASE_DIR = r"d:\projetos\sistema_drywall_v1\sistema\dados"
+BASE_DIR = r"d:\projetos\sistema_detailing_v1\sistema\dados"
 CLIENTES_FILE = os.path.join(BASE_DIR, "clientes.json")
 OS_FILE = os.path.join(BASE_DIR, "os.json")
 PRECOS_FILE = os.path.join(BASE_DIR, "precos.json")
@@ -156,7 +156,7 @@ def sugestoes_otimizacao():
     print("10. **Segurança**: Sanitização de inputs, CSRF protection, logs de auditoria.")
 
 if __name__ == "__main__":
-    print("Iniciando testes do Sistema Drywall Performance...")
+    print("Iniciando testes do Sistema Premium Detailing...")
     test_clientes()
     test_os()
     test_precos()

@@ -1,9 +1,9 @@
 # Histórico de Transição Industrial — Premium Detailing
 
-## [2026-05-11] - Pivô Estratégico: Drywall para Estética Automotiva
+## [2026-05-11] - Pivô Estratégico: Detailing para Estética Automotiva
 
 ### Descrição
-Transição completa da lógica de negócio de gestão de obras (Drywall) para um sistema especializado em Estética Automotiva de Alta Performance (Premium Detailing).
+Transição completa da lógica de negócio de gestão de obras (Detailing) para um sistema especializado em Estética Automotiva de Alta Performance (Premium Detailing).
 
 ### Mudanças Realizadas
 - **Branding:** Rebatismo do sistema para "Premium Detailing Manager".
@@ -94,6 +94,24 @@ Preparação do sistema para demonstração pública, removendo a barreira de lo
 ### Próximos Passos
 - Monitorar feedback de usuários públicos.
 - Reativar login condicional caso o sistema saia do modo "Demo".
+
+---
+
+## [2026-05-11] - Expurgos de Branding Legado (Drywall)
+
+### Descrição
+Remoção completa e sistemática de todas as menções ao termo "Drywall" no código-fonte, comentários, metadados e arquivos de configuração, consolidando a identidade "Premium Detailing".
+
+### Mudanças Realizadas
+- **Global Search & Replace:** Substituição de "Drywall Performance" por "Premium Detailing" em 19 arquivos críticos.
+- **Interface:** Atualização de títulos de páginas, labels de backup e cabeçalhos de CSS (`style.css`).
+- **Banco de Dados:** Ajuste de nomes de produtos e categorias em `precos.json` e `os.json` (Legado -> Detailing).
+- **Configuração:** Limpeza de placeholders em `config.example.php` e arquivos de sistema.
+- **Documentação:** Atualização do `LEIA-ME.txt` e `HISTORICO_CHAT.md`.
+
+### Próximos Passos
+- Alterar o nome do repositório no GitHub para refletir a nova identidade (Sugerido: `premium-detailing-manager`).
+- Atualizar o logotipo físico (`assets/logo.png`) caso ainda contenha a marca antiga.
 
 ---
 *Assinado: Antigravity AI Engineer*

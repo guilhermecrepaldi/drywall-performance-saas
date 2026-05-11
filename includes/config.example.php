@@ -7,7 +7,7 @@
 define('AUTH_USER', 'Guilherme');
 
 // Senha de acesso. O sistema suporta texto plano ou hash.
-define('AUTH_PASS', 'Drywall2026');
+define('AUTH_PASS', 'Detailing2026');
 
 // Tempo de sessão em segundos (padrão: 8 horas)
 define('SESSION_LIFETIME', 28800);

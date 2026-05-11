@@ -161,7 +161,7 @@ body{font-family:'Barlow',sans-serif;background:#f0f4f8;color:#1a2a3a;padding:24
   <!-- HEADER -->
   <div class="doc-header">
     <div class="logo-area">
-      <img src="assets/logo.png" alt="Drywall Performance"
+      <img src="assets/logo.png" alt="Premium Detailing"
            onerror="this.style.display='none';document.getElementById('lt').style.display='block'">
       <div id="lt" class="logo-txt" style="display:none">
         <div class="l1">PREMIUM</div><div class="l2">DETAILING</div>

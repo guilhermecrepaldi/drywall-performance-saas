@@ -1,4 +1,4 @@
-# Sistema Drywall Performance v1.0
+# Sistema Premium Detailing v1.0
 ## Instruções de instalação no Hostgator
 
 ### 1. ESTRUTURA DE ARQUIVOS
@@ -19,7 +19,7 @@ Para trocar a senha:
 4. Apague `gerar_hash.php` após usar em produção
 
 ### 4. ACESSAR O SISTEMA
-https://drywallperformance.com.br/sistema/
+https://detailingperformance.com.br/sistema/
 
 ### 5. ESTRUTURA MODULAR (para futuras versões)
 Para adicionar um novo módulo (ex: agenda):

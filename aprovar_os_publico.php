@@ -6,7 +6,7 @@ $token = $_GET['token'] ?? '';
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aprovação de OS | Drywall Performance</title>
+<title>Aprovação de OS | Premium Detailing</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a2a3a;min-height:100vh;padding:18px}
@@ -24,7 +24,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th{background:#0d1b2a;c
 </head>
 <body>
 <div class="public-wrap">
-  <div class="public-head"><div class="brand">Drywall <span>Performance</span></div><div style="opacity:.65;margin-top:4px">Aprovação digital de orçamento</div></div>
+  <div class="public-head"><div class="brand">Detailing <span>Performance</span></div><div style="opacity:.65;margin-top:4px">Aprovação digital de orçamento</div></div>
   <div class="doc">
     <div class="sec" id="msg"></div>
     <div id="conteudo"></div>

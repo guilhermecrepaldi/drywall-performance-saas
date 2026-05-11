@@ -335,7 +335,7 @@ function moeda(float $valor): string {
 // ── Envia e-mail de backup ───────────────────────────────────
 function enviar_backup_email(string $email_destino, string $assunto, string $corpo, array $anexos = []): bool {
     $boundary = md5(uniqid());
-    $headers  = "From: sistema@drywallperformance.com.br\r\n";
+    $headers  = "From: sistema@detailingperformance.com.br\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: multipart/mixed; boundary=\"{$boundary}\"\r\n";
 

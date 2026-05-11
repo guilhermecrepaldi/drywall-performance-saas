@@ -28,7 +28,7 @@ if ($method === 'POST') {
         'clientes.json' => json_encode(ler_db('clientes'), JSON_UNESCAPED_UNICODE),
         'os.json' => json_encode(ler_db('os'), JSON_UNESCAPED_UNICODE),
     ];
-    enviar_backup_email(BACKUP_EMAIL, 'Backup Sistema Drywall - Preços', 'Backup automático após alteração de preços.', $anexos);
+    enviar_backup_email(BACKUP_EMAIL, 'Backup Premium Detailing Manager - Preços', 'Backup automático após alteração de preços.', $anexos);
 
     resposta_json(true, 'Preços salvos');
 }

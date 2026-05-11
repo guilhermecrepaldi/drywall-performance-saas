@@ -608,7 +608,7 @@ function database_setup_run(?PDO $db = null): void {
             $defaults['empresa_endereco'],
             (float)$defaults['margem_padrao_percentual'],
             'Orçamento válido conforme prazo informado. Serviços executados conforme escopo aprovado.',
-            'Guilherme Crepaldi - Drywall Performance',
+            'Guilherme Crepaldi - Premium Detailing',
             '',
         ]
     );

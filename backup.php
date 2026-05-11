@@ -23,7 +23,7 @@ function importar_dump_mysql(string $arquivo): bool {
 if (isset($_GET['export']) && $_GET['export'] === 'mysql') {
     $dump = gerar_dump_mysql();
     header('Content-Type: application/sql; charset=utf-8');
-    header('Content-Disposition: attachment; filename="backup_' . date('Ymd_Hi') . '_drywallcrm.sql"');
+    header('Content-Disposition: attachment; filename="backup_' . date('Ymd_Hi') . '_detailingcrm.sql"');
     header('Content-Length: ' . strlen($dump));
     echo $dump;
     exit;
@@ -60,9 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_backup'])) {
         $dump = gerar_dump_mysql();
         $ok = enviar_backup_email(
             $email,
-            'Backup Drywall Performance - ' . date('d/m/Y H:i'),
-            "Backup MySQL completo do sistema Drywall Performance.\nGerado em: " . date('d/m/Y H:i'),
-            ['drywallcrm_' . date('Ymd_Hi') . '.sql' => $dump]
+            'Backup Premium Detailing - ' . date('d/m/Y H:i'),
+            "Backup MySQL completo do sistema Premium Detailing.\nGerado em: " . date('d/m/Y H:i'),
+            ['detailingcrm_' . date('Ymd_Hi') . '.sql' => $dump]
         );
         $msg_ok  = $ok ? "Backup enviado para {$email}" : '';
         $msg_err = $ok ? '' : 'Erro ao enviar e-mail. Verifique as configurações SMTP.';

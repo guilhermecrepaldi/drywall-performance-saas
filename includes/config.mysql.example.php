@@ -9,7 +9,7 @@ define('BACKUP_EMAIL', 'silvagui8@gmail.com');
 
 define('DB_DRIVER', 'mysql');
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'SEU_USUARIO_CPANEL_drywallcrm');
-define('DB_USER', 'SEU_USUARIO_CPANEL_drywalluser');
+define('DB_NAME', 'SEU_USUARIO_CPANEL_detailingcrm');
+define('DB_USER', 'SEU_USUARIO_CPANEL_detailinguser');
 define('DB_PASS', 'SUA_SENHA_FORTE_AQUI');
 define('DB_CHARSET', 'utf8mb4');

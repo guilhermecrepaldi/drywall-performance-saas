@@ -135,13 +135,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salvar_os'])) {
                 'precos.json'   => json_encode(ler_db('precos'), JSON_UNESCAPED_UNICODE),
             ];
             if ($email_backup) {
-                $assunto = "Backup OS {$codigo} — Drywall Performance";
+                $assunto = "Backup OS {$codigo} — Premium Detailing";
                 $corpo   = "OS {$codigo} salva em " . date('d/m/Y H:i') . ".\nCliente: {$os['cliente_nome']}\nTotal: " . moeda($total_geral);
                 $backup_ok = enviar_backup_email($email_backup, $assunto, $corpo, $anexos);
                 $backup_status = $backup_ok ? 'backup=sent' : 'backup=fail';
             }
             // Sempre enviar backup para o e-mail padrão
-            enviar_backup_email(BACKUP_EMAIL, "Backup Sistema Drywall - OS {$codigo}", "Backup automático após salvar OS {$codigo}.", $anexos);
+            enviar_backup_email(BACKUP_EMAIL, "Backup Premium Detailing Manager - OS {$codigo}", "Backup automático após salvar OS {$codigo}.", $anexos);
             $redirect = "os.php?ok=1&id=" . urlencode($os['id']);
             if ($backup_status) {
                 $redirect .= '&' . $backup_status;
@@ -713,7 +713,7 @@ function cnaeCodigos(valor) {
 function textoExplicacaoCnae(idx, valor) {
   const codigosExistentes = cnaeCodigos(valor);
   
-  let html = '<div style="padding:5px; border-bottom:1px solid #ddd; margin-bottom:5px; font-weight:bold; color:var(--navy);">Sugestões de CNAE (Gesso/Drywall):</div>';
+  let html = '<div style="padding:5px; border-bottom:1px solid #ddd; margin-bottom:5px; font-weight:bold; color:var(--navy);">Sugestões de CNAE (Estética Automotiva):</div>';
   
   // Lista de sugestões rápidas
   const sugestoes = [

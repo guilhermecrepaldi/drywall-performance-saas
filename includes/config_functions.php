@@ -35,7 +35,7 @@ function obter_configuracoes(): array {
     if (!$config) {
         $stmtInsert = $pdo->prepare("INSERT INTO configuracoes
             (chave, valor, usuario_id, nome, telefone, email, cnpj, endereco, margem_padrao, texto_padrao_os, assinatura_pdf, logo_url, atualizado_em)
-            VALUES (?, '', ?, 'Drywall Performance', '', '', '', '', 25, '', '', '', ?)");
+            VALUES (?, '', ?, 'Premium Detailing', '', '', '', '', 25, '', '', '', ?)");
         $stmtInsert->execute([$chave, $usuario_id, date('Y-m-d H:i:s')]);
         $stmt->execute([$chave, 'empresa_config', $usuario_id, $chave]);
         $config = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -147,7 +147,7 @@ function mysql_quote_value(PDO $db, mixed $valor): string {
 function gerar_dump_mysql(): string {
     global $pdo;
     $tabelas = ['usuarios', 'clientes', 'os', 'precos', 'agenda', 'financeiro', 'followups', 'configuracoes', 'anexos', 'produtos', 'fornecedores', 'produto_fornecedor_precos', 'desenvolvimento'];
-    $dump = "-- Backup MySQL Drywall CRM\n";
+    $dump = "-- Backup MySQL Detailing CRM\n";
     $dump .= "-- Gerado em " . date('Y-m-d H:i:s') . "\n\n";
     $dump .= "SET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS=0;\n\n";
 

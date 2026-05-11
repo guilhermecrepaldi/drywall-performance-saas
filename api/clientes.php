@@ -42,7 +42,7 @@ switch ($method) {
                 'precos.json' => json_encode(ler_db('precos'), JSON_UNESCAPED_UNICODE),
                 'os.json' => json_encode(ler_db('os'), JSON_UNESCAPED_UNICODE),
             ];
-            enviar_backup_email(BACKUP_EMAIL, 'Backup Sistema Drywall - Clientes', 'Backup automático após alteração de clientes.', $anexos);
+            enviar_backup_email(BACKUP_EMAIL, 'Backup Premium Detailing Manager - Clientes', 'Backup automático após alteração de clientes.', $anexos);
 
             resposta_json(true, 'Cliente salvo', ['id' => $dados['id']]);
         } else {
