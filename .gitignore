@@ -1,0 +1,10 @@
+# Antigravity v2026 Git Ignore
+config.php
+dados.db
+backups/
+uploads/
+*.log
+.DS_Store
+node_modules/
+dist/
+.env

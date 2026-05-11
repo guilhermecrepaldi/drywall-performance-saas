@@ -1,0 +1,39 @@
+# Sistema Drywall Performance v1.0
+## Instruções de instalação no Hostgator
+
+### 1. ESTRUTURA DE ARQUIVOS
+Suba a pasta `/sistema/` inteira para dentro de `/public_html/` no cPanel.
+Resultado: `public_html/sistema/`
+
+### 2. PERMISSÕES DA PASTA /dados/
+No cPanel → Gerenciador de Arquivos → pasta `/sistema/dados/`
+Clique com botão direito → Permissões → Coloque: 755
+
+### 3. SENHA DE ACESSO
+O sistema usa login por sessão PHP em `/sistema/login.php`.
+
+Para trocar a senha:
+1. Acesse `/sistema/gerar_hash.php` depois de fazer login
+2. Gere o hash bcrypt da nova senha
+3. Substitua o valor de `AUTH_PASS` em `/sistema/includes/config.php`
+4. Apague `gerar_hash.php` após usar em produção
+
+### 4. ACESSAR O SISTEMA
+https://drywallperformance.com.br/sistema/
+
+### 5. ESTRUTURA MODULAR (para futuras versões)
+Para adicionar um novo módulo (ex: agenda):
+1. Crie `/sistema/agenda.php`
+2. Crie `/sistema/api/agenda.php`
+3. Crie `/sistema/dados/agenda.json` com `[]`
+4. Adicione o link no menu em `/sistema/includes/head.php`
+Pronto — nada do existente é afetado.
+
+### 6. BACKUP
+- Acesse /sistema/backup.php
+- Clique em "Enviar backup agora" para receber os JSONs por e-mail
+- Ou clique em "Exportar" para baixar cada arquivo individualmente
+
+### 7. ADICIONAR LOGO
+Coloque o arquivo `logo.png` em `/public_html/assets/logo.png`
+(Mesmo logo do site principal — o sistema usa o mesmo arquivo)

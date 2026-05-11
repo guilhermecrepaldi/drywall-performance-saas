@@ -1,0 +1,33 @@
+# Autenticação gerenciada por sessão PHP (login.php)
+# O Basic Auth foi removido pois dependia de caminho absoluto do servidor.
+
+# Bloqueia acesso direto ao banco de dados SQLite
+<FilesMatch "\.(db|sqlite|sqlite3)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Bloqueia acesso direto aos arquivos JSON de dados
+<FilesMatch "\.json$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Bloqueia acesso direto aos includes PHP
+<FilesMatch "^(config|auth|helpers|database_setup)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Bloqueia acesso à pasta includes diretamente
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Proteção adicional: headers de segurança
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
