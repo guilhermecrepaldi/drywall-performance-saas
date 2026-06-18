@@ -572,7 +572,7 @@ function database_setup_run(?PDO $db = null): void {
 
     $defaults = [
         'empresa_nome' => 'Premium Detailing',
-        'empresa_cnpj' => '00.000.000/0001-00',
+        'empresa_cnpj' => '',
         'empresa_endereco' => 'Av. Automotiva, 1000 - São Paulo/SP',
         'empresa_telefone' => '(11) 91359-5985',
         'empresa_email' => 'contato@premiumdetailing.com.br',
