@@ -567,15 +567,15 @@ function database_setup_run(?PDO $db = null): void {
     database_setup_insert_ignore(
         $db,
         'INSERT INTO usuarios (email, usuario, senha) VALUES (?, ?, ?)',
-        ['contato@premiumdetailing.com.br', AUTH_USER, AUTH_PASS]
+        ['admin@empresa.com.br', AUTH_USER, AUTH_PASS]
     );
 
     $defaults = [
-        'empresa_nome' => 'Premium Detailing',
+        'empresa_nome' => 'Minha Empresa',
         'empresa_cnpj' => '',
-        'empresa_endereco' => 'Av. Automotiva, 1000 - São Paulo/SP',
-        'empresa_telefone' => '(11) 91359-5985',
-        'empresa_email' => 'contato@premiumdetailing.com.br',
+        'empresa_endereco' => '',
+        'empresa_telefone' => '',
+        'empresa_email' => '',
         'empresa_logo' => '',
         'pagamento_padrao' => 'Entrada de 50% no check-in e saldo na entrega do veículo.',
         'validade_padrao_dias' => '7',
@@ -608,7 +608,7 @@ function database_setup_run(?PDO $db = null): void {
             $defaults['empresa_endereco'],
             (float)$defaults['margem_padrao_percentual'],
             'Orçamento válido conforme prazo informado. Serviços executados conforme escopo aprovado.',
-            'Guilherme Crepaldi - Premium Detailing',
+            'Assinatura da Empresa',
             '',
         ]
     );

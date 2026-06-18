@@ -1,16 +1,20 @@
 <?php
-$pass = '@Detailing2026';
+// Script de reset de senha — use LOCALMENTE, NUNCA no servidor.
+// Gera um hash bcrypt para o usuario admin.
+// ATENCAO: apague este arquivo apos o uso.
+$pass = 'SENHA_TEMPORARIA';  // troque antes de rodar
 $hash = password_hash($pass, PASSWORD_BCRYPT);
 $file = __DIR__ . '/includes/config.php';
 if (file_exists($file)) {
     $content = file_get_contents($file);
     $content = preg_replace("/define\('AUTH_PASS', '.*'\);/", "define('AUTH_PASS', '$hash');", $content);
     file_put_contents($file, $content);
-    echo "<h1>✅ Sucesso!</h1>";
-    echo "<p>A senha do usuário <strong>Guilherme</strong> foi atualizada para <strong>@Detailing2026</strong>.</p>";
-    echo "<p>Este arquivo será excluído por segurança.</p>";
+    echo "<h1>✅ Senha atualizada!</h1>";
+    echo "<p>Apague este arquivo imediatamente por seguranca.</p>";
 } else {
-    echo "Erro: Arquivo config.php não encontrado.";
+    echo "Erro: Arquivo config.php nao encontrado.";
 }
-// unlink(__FILE__); // Comentei para você ver o sucesso antes de deletar
+// ATENCAO: Descomente a linha abaixo para auto-destruir este arquivo:
+// unlink(__FILE__);
+
 ?>
